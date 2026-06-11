@@ -181,16 +181,10 @@ h3 {
   display: inline-flex;
   align-items: center;
   width: fit-content;
-  border: 1px solid var(--hairline);
-  border-radius: 999px;
-  padding: 8px 14px;
-  background: rgba(255, 253, 248, 0.54);
   color: var(--sage);
 }
 
 .badge--warm {
-  border-color: rgba(247, 243, 237, 0.28);
-  background: rgba(247, 243, 237, 0.1);
   color: #f1d2be;
 }
 
@@ -636,8 +630,6 @@ h3 {
 
 .hero .badge,
 .get-started .badge {
-  border-color: rgba(247, 243, 237, 0.28);
-  background: rgba(247, 243, 237, 0.1);
   color: #e7e0d2;
 }
 
@@ -690,8 +682,10 @@ h3 {
 }
 
 .discovery {
-  background: var(--brown);
-  color: var(--ivory);
+  position: relative;
+  z-index: 1;
+  background: var(--white);
+  color: var(--espresso);
 }
 
 .discovery-grid {
@@ -699,14 +693,18 @@ h3 {
   grid-template-columns: 0.95fr 1fr;
   gap: 72px;
   align-items: center;
-  padding-block: 112px;
+  /* No bottom padding: the visual overflows into the cream section below. */
+  padding-block: 112px 0;
 }
 
 .discovery-visual {
   position: relative;
-  min-height: 520px;
+  min-height: 540px;
+  /* Push the image down so its lower portion overflows into the next section. */
+  margin-bottom: -120px;
   overflow: hidden;
   border-radius: var(--radius-large);
+  box-shadow: 0 40px 80px -50px rgba(33, 29, 25, 0.55);
   background:
     linear-gradient(160deg, rgba(20, 30, 18, 0.12), rgba(20, 30, 18, 0.42)),
     url("/assets/treatments.webp") center / cover no-repeat,
@@ -719,20 +717,32 @@ h3 {
   align-content: center;
 }
 
+.discovery-panel .badge--warm {
+  color: var(--brown);
+}
+
 .discovery-panel h2 {
   max-width: 520px;
-  color: #f3e7dd;
+  color: var(--brown);
+  font-size: 2.6rem;
 }
 
 .discovery-panel p:not(.badge) {
   max-width: 480px;
-  color: rgba(243, 231, 221, 0.84);
+  color: var(--muted);
   font-size: 1.12rem;
 }
 
 .discovery-panel .btn {
   width: fit-content;
-  color: var(--brown-dark);
+  background: var(--brown);
+  color: var(--ivory);
+}
+
+.discovery-panel .btn:hover,
+.discovery-panel .btn:focus-visible {
+  background: var(--brown-dark);
+  box-shadow: 0 18px 32px -22px rgba(106, 53, 26, 0.7);
 }
 
 .popular,
@@ -741,7 +751,8 @@ h3 {
 }
 
 .popular .wrap {
-  padding-block: 112px;
+  /* Extra top padding so the overflowing discovery image clears the heading. */
+  padding-block: 200px 112px;
 }
 
 .section-heading {
@@ -1071,10 +1082,12 @@ h3 {
   .discovery-grid {
     grid-template-columns: 1fr;
     gap: 42px;
+    padding-block: 112px;
   }
 
   .discovery-visual {
     min-height: 430px;
+    margin-bottom: 0;
   }
 
   .treatment-grid {
