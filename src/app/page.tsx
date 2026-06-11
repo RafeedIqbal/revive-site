@@ -8,6 +8,13 @@ const BOOKING_URL =
 
 const treatments = [
   {
+    name: "Laser hair removal",
+    price: "From £15",
+    description:
+      "Effectively targets hair at the root, significantly reducing unwanted growth while leaving your skin feeling soft and rejuvenated. Perfect for various skin types.",
+    className: "treatment-card--laser treatment-card--large",
+  },
+  {
     name: "Tattoo Removal",
     price: "From £40",
     description:
@@ -20,13 +27,6 @@ const treatments = [
     description:
       "Uses gentle microcurrents to help improve skin firmness and reduce appearance of fine lines for a refreshed, youthful complexion. Suitable for all skin types.",
     className: "treatment-card--caci",
-  },
-  {
-    name: "Laser hair removal",
-    price: "From £15",
-    description:
-      "Effectively targets hair at the root, significantly reducing unwanted growth while leaving your skin feeling soft and rejuvenated. Perfect for various skin types.",
-    className: "treatment-card--laser treatment-card--large",
   },
   {
     name: "Derma pen microneedling",
@@ -93,18 +93,19 @@ function Star() {
   );
 }
 
-function LogoMark() {
+function LogoMark({ variant = "default" }: { variant?: "default" | "light" }) {
+  const src = variant === "light" ? "/assets/logo-white.webp" : "/logo.webp";
   return (
     <span className="brand-mark" aria-hidden="true">
-      <Image src="/logo.webp" alt="" width={716} height={765} priority />
+      <Image src={src} alt="" width={716} height={765} priority />
     </span>
   );
 }
 
-function Brand() {
+function Brand({ variant = "default" }: { variant?: "default" | "light" }) {
   return (
     <a className="brand" href="#top" aria-label="Revive Laser Clinic home">
-      <LogoMark />
+      <LogoMark variant={variant} />
       <span className="wordmark">
         <strong>REVIVE</strong>
         <span>Laser Clinic</span>
@@ -119,6 +120,8 @@ export default function Home() {
   const [mobileTreatmentsOpen, setMobileTreatmentsOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const heroMediaRef = useRef<HTMLDivElement>(null);
+  const getStartedMediaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const navShell = document.querySelector(".nav-shell");
@@ -171,6 +174,41 @@ export default function Home() {
 
     revealItems.forEach((item) => observer.observe(item));
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const hero = heroMediaRef.current;
+    const getStarted = getStartedMediaRef.current;
+    if (!hero && !getStarted) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      // Hero sits at the top: pronounced drift at half scroll speed.
+      if (hero) {
+        hero.style.transform = `translate3d(0, ${window.scrollY * 0.5}px, 0)`;
+      }
+      // Get-started is lower in the page: drift relative to its viewport position.
+      if (getStarted) {
+        const rect = getStarted.getBoundingClientRect();
+        const fromCenter = rect.top + rect.height / 2 - window.innerHeight / 2;
+        getStarted.style.transform = `translate3d(0, ${fromCenter * -0.18}px, 0)`;
+      }
+    };
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   function openMegaMenu() {
@@ -316,7 +354,20 @@ export default function Home() {
       </div>
 
       <header className="hero">
-        <div className="hero-media" aria-hidden="true" />
+        <div className="hero-media" aria-hidden="true" ref={heroMediaRef}>
+          <video
+            className="media-video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster="/assets/hero-poster.webp"
+            preload="auto"
+          >
+            <source src="/assets/hero.webm" type="video/webm" />
+            <source src="/assets/hero.mp4" type="video/mp4" />
+          </video>
+        </div>
         <div className="wrap hero-content">
           <p className="badge">Laser and skin, Medway, Kent</p>
           <h1>Laser hair removal from £15</h1>
@@ -339,17 +390,11 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <a className="scroll-cue" href="#discovery" aria-label="Scroll to treatments">
-          <span>Scroll</span>
-          <i aria-hidden="true" />
-        </a>
       </header>
 
       <section className="discovery" id="discovery">
         <div className="wrap discovery-grid">
-          <div className="discovery-visual reveal" aria-hidden="true">
-            <span>Treatment room, Snodland</span>
-          </div>
+          <div className="discovery-visual reveal" aria-hidden="true" />
           <div className="discovery-panel reveal">
             <p className="badge badge--warm">About the clinic</p>
             <h2>Treatments that go beyond the surface</h2>
@@ -422,7 +467,20 @@ export default function Home() {
       </section>
 
       <section className="get-started" id="academy">
-        <div className="get-started-media" aria-hidden="true" />
+        <div className="get-started-media" aria-hidden="true" ref={getStartedMediaRef}>
+          <video
+            className="media-video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster="/assets/cta-poster.webp"
+            preload="none"
+          >
+            <source src="/assets/cta.webm" type="video/webm" />
+            <source src="/assets/cta.mp4" type="video/mp4" />
+          </video>
+        </div>
         <div className="wrap get-started-content reveal">
           <p className="badge">Ready to start?</p>
           <h2>Begin your Revive journey</h2>
@@ -438,7 +496,7 @@ export default function Home() {
       <footer className="footer" id="footer">
         <div className="wrap footer-grid">
           <div className="footer-brand">
-            <Brand />
+            <Brand variant="light" />
             <p>© Revive-Laser. Designed by Rive & Limn.</p>
           </div>
           <div>

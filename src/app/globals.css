@@ -577,11 +577,44 @@ h3 {
   position: absolute;
   inset: 0;
   z-index: 0;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1e351f 0%, #6d5a3c 54%, #243c27 100%);
+}
+
+/* Pre-scaled and over-extended so the pronounced parallax offset never reveals edges. */
+.hero-media {
+  top: -20%;
+  height: 140%;
+  will-change: transform;
+}
+
+.media-video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Dark gradient overlay above the video for text legibility. */
+.hero-media::before,
+.get-started-media::before {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  content: "";
+  pointer-events: none;
+}
+
+.hero-media::before {
   background:
-    linear-gradient(105deg, rgba(14, 28, 15, 0.92), rgba(14, 28, 15, 0.62) 48%, rgba(14, 28, 15, 0.34)),
-    linear-gradient(0deg, rgba(14, 28, 15, 0.76), rgba(14, 28, 15, 0.1) 46%),
-    repeating-linear-gradient(90deg, rgba(247, 243, 237, 0.04) 0 1px, transparent 1px 82px),
-    linear-gradient(135deg, #1e351f 0%, #6d5a3c 54%, #243c27 100%);
+    linear-gradient(105deg, rgba(14, 28, 15, 0.88), rgba(14, 28, 15, 0.52) 52%, rgba(14, 28, 15, 0.32)),
+    linear-gradient(0deg, rgba(14, 28, 15, 0.72), rgba(14, 28, 15, 0.08) 48%);
+}
+
+.get-started-media::before {
+  background: linear-gradient(180deg, rgba(14, 28, 15, 0.5), rgba(14, 28, 15, 0.9));
 }
 
 .hero-media::after,
@@ -656,52 +689,6 @@ h3 {
   font-size: 0.78rem;
 }
 
-.scroll-cue {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  z-index: 1;
-  display: grid;
-  justify-items: center;
-  gap: 10px;
-  color: rgba(247, 243, 237, 0.64);
-  transform: translateX(-50%);
-}
-
-.scroll-cue span {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 0.66rem;
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-
-.scroll-cue i {
-  display: block;
-  width: 1px;
-  height: 36px;
-  background: linear-gradient(rgba(247, 243, 237, 0.74), transparent);
-  overflow: hidden;
-}
-
-.scroll-cue i::after {
-  display: block;
-  width: 1px;
-  height: 20px;
-  background: var(--ivory);
-  content: "";
-  animation: scroll-cue 1.9s var(--ease) infinite;
-}
-
-@keyframes scroll-cue {
-  from {
-    transform: translateY(-22px);
-  }
-
-  to {
-    transform: translateY(42px);
-  }
-}
-
 .discovery {
   background: var(--brown);
   color: var(--ivory);
@@ -721,20 +708,9 @@ h3 {
   overflow: hidden;
   border-radius: var(--radius-large);
   background:
-    linear-gradient(145deg, rgba(255, 253, 248, 0.13), rgba(255, 253, 248, 0.02)),
-    repeating-linear-gradient(135deg, rgba(247, 243, 237, 0.08) 0 1px, transparent 1px 46px),
+    linear-gradient(160deg, rgba(20, 30, 18, 0.12), rgba(20, 30, 18, 0.42)),
+    url("/assets/treatments.webp") center / cover no-repeat,
     linear-gradient(140deg, #b98b66 0%, #8b5633 55%, #5b331b 100%);
-}
-
-.discovery-visual span {
-  position: absolute;
-  bottom: 16px;
-  left: 18px;
-  z-index: 1;
-  color: rgba(255, 255, 255, 0.72);
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 0.7rem;
-  text-transform: uppercase;
 }
 
 .discovery-panel {
@@ -831,19 +807,23 @@ h3 {
 }
 
 .treatment-card--laser {
-  --card-bg: linear-gradient(150deg, #2f4a2c 0%, #1c3320 55%, #12231a 100%);
+  --card-bg: url("/assets/laser-hair-removal.webp") center / cover no-repeat,
+    linear-gradient(150deg, #2f4a2c 0%, #1c3320 55%, #12231a 100%);
 }
 
 .treatment-card--tattoo {
-  --card-bg: linear-gradient(150deg, #6a3f23 0%, #4a2812 60%, #2c1a0e 100%);
+  --card-bg: url("/assets/tattoo-removal.webp") center / cover no-repeat,
+    linear-gradient(150deg, #6a3f23 0%, #4a2812 60%, #2c1a0e 100%);
 }
 
 .treatment-card--caci {
-  --card-bg: linear-gradient(150deg, #7a6a4a 0%, #56492f 60%, #312819 100%);
+  --card-bg: url("/assets/caci-facial.webp") center / cover no-repeat,
+    linear-gradient(150deg, #7a6a4a 0%, #56492f 60%, #312819 100%);
 }
 
 .treatment-card--derma {
-  --card-bg: linear-gradient(150deg, #3a5240 0%, #2a3d2c 50%, #182a1c 100%);
+  --card-bg: url("/assets/microneedling.webp") center / cover no-repeat,
+    linear-gradient(150deg, #3a5240 0%, #2a3d2c 50%, #182a1c 100%);
 }
 
 .price-pill {
@@ -943,10 +923,10 @@ h3 {
 }
 
 .get-started-media {
-  background:
-    linear-gradient(180deg, rgba(14, 28, 15, 0.42), rgba(14, 28, 15, 0.9)),
-    repeating-linear-gradient(0deg, rgba(247, 243, 237, 0.035) 0 1px, transparent 1px 72px),
-    linear-gradient(140deg, #19301b 0%, #59452a 52%, #102011 100%);
+  top: -20%;
+  height: 140%;
+  background: linear-gradient(140deg, #19301b 0%, #59452a 52%, #102011 100%);
+  will-change: transform;
 }
 
 .get-started-content {
@@ -1163,10 +1143,6 @@ h3 {
 
   .rating {
     flex-wrap: wrap;
-  }
-
-  .scroll-cue {
-    display: none;
   }
 
   .discovery-grid,
