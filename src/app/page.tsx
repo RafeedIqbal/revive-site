@@ -456,8 +456,10 @@ export default function Home() {
                     {faq.question}
                     <span className="plus-icon" aria-hidden="true" />
                   </button>
-                  <div className="faq-answer" hidden={!isOpen}>
-                    <p>{faq.answer}</p>
+                  <div className="faq-answer">
+                    <div className="faq-answer-inner">
+                      <p>{faq.answer}</p>
+                    </div>
                   </div>
                 </div>
               );
